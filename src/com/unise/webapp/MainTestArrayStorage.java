@@ -1,6 +1,7 @@
-package com.unise.webapp.storage;
+package com.unise.webapp;
 
 import com.unise.webapp.model.Resume;
+import com.unise.webapp.storage.ArrayStorage;
 
 /**
  * Test for your com.unise.webapp.storage.ArrayStorage implementation
