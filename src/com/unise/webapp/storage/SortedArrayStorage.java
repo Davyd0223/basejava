@@ -10,10 +10,6 @@ public class SortedArrayStorage extends AbstracktArrayStorage {
     protected final Resume[] storageSort = new Resume[STORAGE_LIMIT];
     private int size = 0;
 
-    public void clear() {
-
-    }
-
     public void save(Resume r) {
         int index = Arrays.binarySearch(storageSort, 0, size, Comparator.comparing(Resume::getUuid));
 
@@ -30,18 +26,6 @@ public class SortedArrayStorage extends AbstracktArrayStorage {
         }
     }
 
-    public void delete(String uuid) {
-
-    }
-
-    public void update(Resume resume) {
-
-    }
-
-    public Resume[] getAll() {
-        return new Resume[0];
-    }
-
     protected int findIndex(String uuid) {
         int indexUuid = -1;
         Arrays.sort(storageSort);
@@ -50,7 +34,6 @@ public class SortedArrayStorage extends AbstracktArrayStorage {
                 indexUuid = i;
             }
         }
-        //int i = Arrays.binarySearch(storageSort, 0, size);
         return indexUuid;
     }
 
