@@ -11,6 +11,8 @@ public abstract class AbstracktArrayStorage implements Storage {
     protected int size = 0;
 
 
+    public abstract void save(Resume r);
+
     public Resume get(String uuid) {
         int index = findIndex(uuid);
         if (index >= 0) {
@@ -57,14 +59,6 @@ public abstract class AbstracktArrayStorage implements Storage {
         size = 0;
     }
 
-    protected int findIndex(String uuid) {
-        int indexUuid = -1;
-        for (int i = 0; i < size; i++) {
-            if (uuid.equals(storage[i].getUuid())) {
-                indexUuid = i;
-            }
-        }
-        return indexUuid;
-    }
+    protected abstract int findIndex(String uuid);
 
 }
