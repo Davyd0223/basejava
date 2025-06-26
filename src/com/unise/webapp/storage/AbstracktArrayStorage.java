@@ -10,8 +10,18 @@ public abstract class AbstracktArrayStorage implements Storage {
     protected final Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
+    public void save(Resume r) {
+        int index = findIndex(r.getUuid());
 
-    public abstract void save(Resume r);
+        if (size >= storage.length) {
+            System.out.println("Массив заполнен, не удалось добавить резюме: " + r.getUuid());
+        } else if (index != -1) {
+            System.out.println("Резюме c UUID " + r.getUuid() + " уже существует");
+        } else {
+            storage[size] = r;
+            size++;
+        }
+    }
 
     public Resume get(String uuid) {
         int index = findIndex(uuid);
@@ -22,10 +32,6 @@ public abstract class AbstracktArrayStorage implements Storage {
             System.out.println("Резюме не существует в storage");
         }
         return null;
-    }
-
-    public Resume[] getAll() {
-        return Arrays.copyOfRange(storage, 0, size);
     }
 
     public void update(Resume resume) {
@@ -50,6 +56,10 @@ public abstract class AbstracktArrayStorage implements Storage {
         }
     }
 
+    public Resume[] getAll() {
+        return Arrays.copyOfRange(storage, 0, size);
+    }
+
     public int size() {
         return size;
     }
@@ -58,6 +68,10 @@ public abstract class AbstracktArrayStorage implements Storage {
         Arrays.fill(storage, null);
         size = 0;
     }
+
+    protected abstract void insertResume(Resume resume, int index);
+
+    protected abstract void removeResume(int index);
 
     protected abstract int findIndex(String uuid);
 

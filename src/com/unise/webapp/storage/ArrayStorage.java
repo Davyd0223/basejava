@@ -7,17 +7,14 @@ import com.unise.webapp.model.Resume;
  */
 public class ArrayStorage extends AbstracktArrayStorage {
 
-    public void save(Resume r) {
-        int index = findIndex(r.getUuid());
+    @Override
+    protected void insertResume(Resume resume, int index) {
+        storage[size] = resume;
+    }
 
-        if (size >= storage.length) {
-            System.out.println("Массив заполнен, не удалось добавить резюме: " + r.getUuid());
-        } else if (index != -1) {
-            System.out.println("Резюме c UUID " + r.getUuid() + " уже существует");
-        } else {
-            storage[size] = r;
-            size++;
-        }
+    @Override
+    protected void removeResume(int index) {
+        storage[index] = storage[size - 1];
     }
 
     protected int findIndex(String uuid) {
