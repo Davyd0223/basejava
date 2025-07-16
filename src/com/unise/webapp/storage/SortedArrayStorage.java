@@ -17,14 +17,13 @@ public class SortedArrayStorage extends AbstracktArrayStorage {
     protected void removeResume(int index) {
         int elementMoved = size - index - 1;
         if (elementMoved > 0) {
-            System.arraycopy(storage, index +1,storage,index,elementMoved);
+            System.arraycopy(storage, index + 1, storage, index, elementMoved);
         }
     }
 
     protected int findIndex(String uuid) {
-        Resume searchKey = new Resume();
-        searchKey.setUuid(uuid);
-        return Arrays.binarySearch(storage,0,size,searchKey);
+        Resume searchKey = new Resume(uuid);
+        return Arrays.binarySearch(storage, 0, size, searchKey);
     }
 
 }

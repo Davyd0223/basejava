@@ -1,5 +1,8 @@
 package com.unise.webapp.storage;
 
+import com.unise.webapp.exception.ExistStorageException;
+import com.unise.webapp.exception.NotExistStorageException;
+import com.unise.webapp.exception.StorageException;
 import com.unise.webapp.model.Resume;
 
 import java.util.Arrays;
@@ -10,49 +13,48 @@ public abstract class AbstracktArrayStorage implements Storage {
     protected final Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
-    public void save(Resume r) {
+    public final void save(Resume r) {
         int index = findIndex(r.getUuid());
 
         if (size >= storage.length) {
-            System.out.println("Массив заполнен, не удалось добавить резюме: " + r.getUuid());
+            throw new ExistStorageException(r.getUuid());
         } else if (index != -1) {
-            System.out.println("Резюме c UUID " + r.getUuid() + " уже существует");
+            throw new StorageException("Storage overflow", r.getUuid());
         } else {
             storage[size] = r;
             size++;
         }
     }
 
-    public Resume get(String uuid) {
+    public final Resume get(String uuid) {
         int index = findIndex(uuid);
         if (index >= 0) {
             return storage[index];
-
         } else {
-            System.out.println("Резюме не существует в storage");
+            throw new NotExistStorageException(uuid);
         }
-        return null;
     }
 
-    public void update(Resume resume) {
+    public final void update(Resume resume) {
         int index = findIndex(resume.getUuid());
         if (index >= 0) {
             if (resume.getUuid().equals(storage[index].getUuid())) {
                 storage[index] = resume;
             }
         } else {
-            System.out.println("Резюме не существует в storage");
+            throw new NotExistStorageException(resume.getUuid());
         }
     }
 
-    public void delete(String uuid) {
+    public final void delete(String uuid) {
         int index = findIndex(uuid);
         if (index >= 0) {
             storage[index] = storage[size - 1];
             storage[size - 1] = null;
             size--;
         } else {
-            System.out.println("Резюме не существует в storage");
+            throw new NotExistStorageException(uuid);
+
         }
     }
 
