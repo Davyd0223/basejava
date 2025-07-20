@@ -1,4 +1,3 @@
-import com.unise.webapp.exception.ExistStorageException;
 import com.unise.webapp.exception.NotExistStorageException;
 import com.unise.webapp.exception.StorageException;
 import com.unise.webapp.model.Resume;
@@ -20,6 +19,7 @@ public abstract class AbstracktArrayStorageTest {
 
     private static final String UUID_4 = "uuid4";
     private static final Resume RESUME_4 = new Resume(UUID_4);
+    private Object AbstractArrayStorage;
 
     public AbstracktArrayStorageTest(Storage storage) {
         this.storage = storage;
@@ -46,13 +46,11 @@ public abstract class AbstracktArrayStorageTest {
     @Test
     public void save() throws Exception {
         storage.save(RESUME_4);
+        assertGet(RESUME_2);
+        assertSize(4);
         Assertions.assertThrows(StorageException.class, () -> {
-            storage.save(RESUME_2);
-        });
-        Assertions.assertThrows(ExistStorageException.class, () -> {
-            int size = storage.size();
-            if (5 > size) {
-                throw new ExistStorageException("uuid5");
+            for (int i = 0; i <= 10000; i++) {
+                storage.save(new Resume());
             }
         });
     }

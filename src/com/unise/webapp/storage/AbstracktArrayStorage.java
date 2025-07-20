@@ -17,9 +17,9 @@ public abstract class AbstracktArrayStorage implements Storage {
         int index = findIndex(r.getUuid());
 
         if (size >= storage.length) {
-            throw new ExistStorageException(r.getUuid());
-        } else if (index != -1) {
             throw new StorageException("Storage overflow", r.getUuid());
+        } else if (index > 0) {
+            throw new ExistStorageException(r.getUuid());
         } else {
             storage[size] = r;
             size++;
