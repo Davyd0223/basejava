@@ -4,6 +4,8 @@ import com.unise.webapp.model.Resume;
 
 public interface Storage {
 
+    int size();
+
     void save(Resume r);
 
     Resume get(String uuid);
@@ -13,8 +15,6 @@ public interface Storage {
     void delete(String uuid);
 
     Resume[] getAll();
-
-    int size();
 
     void clear();
 }

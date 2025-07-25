@@ -1,27 +1,25 @@
+package com.unise.webapp.storage;
+
 import com.unise.webapp.exception.NotExistStorageException;
 import com.unise.webapp.exception.StorageException;
 import com.unise.webapp.model.Resume;
-import com.unise.webapp.storage.Storage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public abstract class AbstracktArrayStorageTest {
+public abstract class AbstractArrayStorageTest {
     private final Storage storage;
     private static final String UUID_1 = "uuid1";
-    private static final Resume RESUME_1 = new Resume(UUID_1);
-
     private static final String UUID_2 = "uuid2";
-    private static final Resume RESUME_2 = new Resume(UUID_2);
-
     private static final String UUID_3 = "uuid3";
-    private static final Resume RESUME_3 = new Resume(UUID_3);
-
     private static final String UUID_4 = "uuid4";
-    private static final Resume RESUME_4 = new Resume(UUID_4);
-    private Object AbstractArrayStorage;
 
-    public AbstracktArrayStorageTest(Storage storage) {
+    private static final Resume RESUME_1 = new Resume(UUID_1);
+    private static final Resume RESUME_2 = new Resume(UUID_2);
+    private static final Resume RESUME_3 = new Resume(UUID_3);
+    private static final Resume RESUME_4 = new Resume(UUID_4);
+
+    public AbstractArrayStorageTest(Storage storage) {
         this.storage = storage;
     }
 
@@ -48,10 +46,16 @@ public abstract class AbstracktArrayStorageTest {
         storage.save(RESUME_4);
         assertGet(RESUME_2);
         assertSize(4);
+    }
+
+    @Test
+    public void saveOverflow() {
+        storage.clear();
+        for (int i = 0; i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
+            storage.save(new Resume());
+        }
         Assertions.assertThrows(StorageException.class, () -> {
-            for (int i = 0; i <= 10000; i++) {
-                storage.save(new Resume());
-            }
+            storage.save(new Resume());
         });
     }
 

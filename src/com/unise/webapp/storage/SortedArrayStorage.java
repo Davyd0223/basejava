@@ -4,7 +4,7 @@ import com.unise.webapp.model.Resume;
 
 import java.util.Arrays;
 
-public class SortedArrayStorage extends AbstracktArrayStorage {
+public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected void insertResume(Resume resume, int index) {
@@ -21,7 +21,7 @@ public class SortedArrayStorage extends AbstracktArrayStorage {
         }
     }
 
-    protected int findIndex(String uuid) {
+    protected Integer findIndex(String uuid) {
         Resume searchKey = new Resume(uuid);
         return Arrays.binarySearch(storage, 0, size, searchKey);
     }
