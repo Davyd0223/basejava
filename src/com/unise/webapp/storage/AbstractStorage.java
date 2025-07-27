@@ -13,7 +13,7 @@ public abstract class AbstractStorage implements Storage {
     protected abstract void doDelete(Object searchKey);
 
     public void save(Resume r){
-        Object searchKey = getExistSearchKey(r.getUuid());
+        Object searchKey = getNotExistSearchKey(r.getUuid());
         doSave(r,searchKey);
     }
 
@@ -28,7 +28,7 @@ public abstract class AbstractStorage implements Storage {
     }
 
     public void delete(String uuid){
-        Object searchKey = getNotExistSearchKey(uuid);
+        Object searchKey = getExistSearchKey(uuid);
         doDelete(searchKey);
     }
 
@@ -42,7 +42,7 @@ public abstract class AbstractStorage implements Storage {
 
     private Object getNotExistSearchKey(String uuid){
         Object searchKey = findIndex(uuid);
-        if(!isExist(searchKey)){
+        if(isExist(searchKey)){
             throw new ExistStorageException(uuid);
         }
         return searchKey;

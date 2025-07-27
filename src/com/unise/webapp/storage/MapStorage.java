@@ -2,59 +2,54 @@ package com.unise.webapp.storage;
 
 import com.unise.webapp.model.Resume;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-public class ListStorage extends AbstractStorage {
-    private final List<Resume> list = new ArrayList<>();
+public class MapStorage extends AbstractStorage {
+    private final Map<String, Resume> map = new HashMap<>();
 
     @Override
     protected Object findIndex(String uuid) {
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getUuid().equals(uuid)) {
-                return i;
-            }
-        }
-        return null;
+        return uuid;
     }
 
     @Override
     protected boolean isExist(Object searchKey) {
-        return searchKey != null;
+        return false;
     }
 
     @Override
     protected void doSave(Resume r, Object searchKey) {
-        list.add(r);
+
     }
 
     @Override
     protected Resume doGet(Object searchKey) {
-        return list.get((Integer) searchKey);
+        return null;
     }
 
     @Override
     protected void doUpdate(Resume r, Object searchKey) {
-        list.set((Integer) searchKey, r);
+
     }
 
     @Override
     protected void doDelete(Object searchKey) {
-        list.remove(((Integer)searchKey).intValue());
+
     }
 
     @Override
     public int size() {
-        return list.size();
+        return 0;
     }
 
     @Override
     public Resume[] getAll() {
-        return list.toArray(new Resume[0]);
+        return new Resume[0];
     }
 
     @Override
     public void clear() {
-        list.clear();
+
     }
 }
