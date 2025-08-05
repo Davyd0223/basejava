@@ -2,23 +2,22 @@ package com.unise.webapp.storage;
 
 import com.unise.webapp.model.Resume;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class MapStorage extends AbstractStorage {
+public class MapUuidStorage extends AbstractStorage {
     private final Map<String, Resume> map = new HashMap<>();
 
     @Override
     protected Object findIndex(String uuid) {
-        if(map.containsKey(uuid)){
-            return uuid;
-        }
-        return null;
+        return uuid;
     }
 
     @Override
     protected boolean isExist(Object searchKey) {
-        return map.containsKey(searchKey);
+        return map.containsKey(searchKey.toString());
     }
 
     @Override
@@ -38,17 +37,17 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected void doDelete(Object searchKey) {
-        map.remove(searchKey);
+        map.remove(searchKey.toString());
+    }
+
+    @Override
+    protected List<Resume> doCopyAll() {
+        return Collections.emptyList();
     }
 
     @Override
     public int size() {
         return map.size();
-    }
-
-    @Override
-    public Resume[] getAll() {
-        return map.values().toArray(new Resume[0]);
     }
 
     @Override

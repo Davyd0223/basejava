@@ -1,7 +1,13 @@
 package com.unise.webapp.storage;
 
-public class ArrayStorageTest extends AbstractArrayStorageTest {
+import org.junit.jupiter.api.Test;
+
+public class ArrayStorageTest extends AbstractStorageTest {
     public ArrayStorageTest() {
         super(new ArrayStorage());
+    }
+    @Test
+    public void saveOverflow(){
+        doSaveOverflow();
     }
 }
