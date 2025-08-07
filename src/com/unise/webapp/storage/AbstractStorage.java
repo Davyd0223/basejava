@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 public abstract class AbstractStorage implements Storage {
-    public static AbstractStorageTest storage;
+    public static Storage storage;
 
     protected abstract Object findIndex(String uuid);
     protected abstract boolean isExist(Object searchKey);

@@ -2,9 +2,6 @@ package com.unise.webapp.storage;
 
 import com.unise.webapp.model.Resume;
 
-import java.util.Collections;
-import java.util.List;
-
 /**
  * Array based storage for Resumes
  */

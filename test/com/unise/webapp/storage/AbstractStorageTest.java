@@ -45,17 +45,17 @@ public abstract class AbstractStorageTest {
     @Test
     public void save() throws Exception {
         storage.save(RESUME_4);
-        assertGet(RESUME_2);
+        assertGet(RESUME_4);
         assertSize(4);
     }
 
     public void doSaveOverflow() {
         storage.clear();
         for (int i = 0; i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
-            storage.save(new Resume());
+            storage.save(new Resume("New Resume"));
         }
         Assertions.assertThrows(StorageException.class, () -> {
-            storage.save(new Resume());
+            storage.save(new Resume("New Resume"));
         });
     }
 
@@ -79,7 +79,7 @@ public abstract class AbstractStorageTest {
     public void update() throws Exception {
         Resume newResume = new Resume(UUID_1);
         storage.update(newResume);
-        Assertions.assertSame(newResume, storage.get(UUID_1));
+        Assertions.assertEquals(newResume, storage.get(UUID_1));
     }
 
     @Test

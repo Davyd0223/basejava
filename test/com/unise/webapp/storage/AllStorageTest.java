@@ -1,16 +1,16 @@
 package com.unise.webapp.storage;
 
+
 import org.junit.platform.suite.api.SelectClasses;
 import org.junit.platform.suite.api.Suite;
 
 @Suite
 @SelectClasses({
         ArrayStorageTest.class,
-        SortedArrayStorageTest.class,
         ListStorageTest.class,
+        MapResumeStorageTest.class,
         MapStorageTest.class,
-        MapResumeStorageTest.class
+        SortedArrayStorageTest.class
 })
-
 public class AllStorageTest {
 }
