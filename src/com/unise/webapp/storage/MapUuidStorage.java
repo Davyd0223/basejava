@@ -2,10 +2,7 @@ package com.unise.webapp.storage;
 
 import com.unise.webapp.model.Resume;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MapUuidStorage extends AbstractStorage {
     private final Map<String, Resume> map = new HashMap<>();
@@ -42,7 +39,7 @@ public class MapUuidStorage extends AbstractStorage {
 
     @Override
     protected List<Resume> doCopyAll() {
-        return Collections.emptyList();
+        return new ArrayList<>(map.values());
     }
 
     @Override
