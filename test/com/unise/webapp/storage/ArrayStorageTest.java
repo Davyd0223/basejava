@@ -6,8 +6,9 @@ public class ArrayStorageTest extends AbstractStorageTest {
     public ArrayStorageTest() {
         super(new ArrayStorage());
     }
+
     @Test
-    public void saveOverflow(){
-       doSaveOverflow();
+    public void saveOverflow() {
+        doSaveOverflow();
     }
 }

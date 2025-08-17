@@ -6,8 +6,9 @@ public class SortedArrayStorageTest extends AbstractStorageTest {
     public SortedArrayStorageTest() {
         super(new SortedArrayStorage());
     }
+
     @Test
-    public void saveOverflow(){
+    public void saveOverflow() {
         doSaveOverflow();
     }
 }

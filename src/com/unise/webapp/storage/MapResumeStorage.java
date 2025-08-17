@@ -7,37 +7,37 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MapResumeStorage extends AbstractStorage {
+public class MapResumeStorage extends AbstractStorage<String> {
     private final Map<String, Resume> mapResume = new HashMap<>();
 
     @Override
-    protected Object findIndex(String uuid) {
+    protected String findIndex(String uuid) {
         return uuid;
     }
 
     @Override
-    protected boolean isExist(Object searchKey) {
-        return mapResume.containsKey(searchKey.toString());
+    protected boolean isExist(String searchKey) {
+        return mapResume.containsKey(searchKey);
     }
 
     @Override
-    protected void doSave(Resume r, Object searchKey) {
-        mapResume.put(r.getUuid(),r);
+    protected void doSave(Resume r, String searchKey) {
+        mapResume.put(r.getUuid(), r);
     }
 
     @Override
-    protected Resume doGet(Object searchKey) {
-        return mapResume.get(searchKey.toString());
+    protected Resume doGet(String searchKey) {
+        return mapResume.get(searchKey);
     }
 
     @Override
-    protected void doUpdate(Resume r, Object searchKey) {
-        mapResume.put(r.getUuid(),r);
+    protected void doUpdate(Resume r, String searchKey) {
+        mapResume.put(r.getUuid(), r);
     }
 
     @Override
-    protected void doDelete(Object searchKey) {
-        mapResume.remove(searchKey.toString());
+    protected void doDelete(String searchKey) {
+        mapResume.remove(searchKey);
     }
 
     @Override
