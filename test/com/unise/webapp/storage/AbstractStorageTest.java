@@ -15,10 +15,10 @@ public abstract class AbstractStorageTest {
     private static final String UUID_3 = "uuid3";
     private static final String UUID_4 = "uuid4";
 
-    private static final Resume RESUME_1 = new Resume(UUID_1, "Name1");
-    private static final Resume RESUME_2 = new Resume(UUID_2, "Name2");
-    private static final Resume RESUME_3 = new Resume(UUID_3, "Name3");
-    private static final Resume RESUME_4 = new Resume(UUID_4, "Name4");
+    Resume resume1 = ResumeTestData.createResume(UUID_1,"Name1");
+    Resume resume2 = ResumeTestData.createResume(UUID_2,"Name2");
+    Resume resume3 = ResumeTestData.createResume(UUID_3,"Name3");
+    Resume resume4 = ResumeTestData.createResume(UUID_4,"Name4");
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -27,9 +27,9 @@ public abstract class AbstractStorageTest {
     @BeforeEach
     public void setUp() throws Exception {
         storage.clear();
-        storage.save(new Resume(UUID_1, "Name1"));
-        storage.save(new Resume(UUID_2, "Name2"));
-        storage.save(new Resume(UUID_3, "Name3"));
+        storage.save(resume1);
+        storage.save(resume2);
+        storage.save(resume3);
     }
 
     @Test
@@ -44,8 +44,8 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void save() throws Exception {
-        storage.save(RESUME_4);
-        assertGet(RESUME_4);
+        storage.save(resume4);
+        assertGet(resume4);
         assertSize(4);
     }
 
@@ -61,9 +61,9 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void get() throws Exception {
-        assertGet(RESUME_1);
-        assertGet(RESUME_2);
-        assertGet(RESUME_3);
+        assertGet(resume1);
+        assertGet(resume2);
+        assertGet(resume3);
 
         Assertions.assertThrows(NotExistStorageException.class, () -> {
             storage.get("dummy");

@@ -1,22 +1,17 @@
 package com.unise.webapp.storage;
 
-import com.unise.webapp.model.ListSection;
-import com.unise.webapp.model.Period;
-import com.unise.webapp.model.Resume;
-import com.unise.webapp.model.TextSection;
+import com.unise.webapp.model.*;
 
 import java.time.YearMonth;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static com.unise.webapp.model.ContactType.*;
 import static com.unise.webapp.model.SectionType.*;
 
 public class ResumeTestData {
-    public static void main(String[] args) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yyyy");
-        Resume resume = new Resume("uuid1", "Григорий Кислин");
 
+    public static Resume createResume(String uuid, String fullName) {
+        Resume resume = new Resume(uuid, fullName);
         resume.contacts.put(PHONE, "23-54-78");
         resume.contacts.put(MOBILE, "+7(921) 855-0482");
         resume.contacts.put(HOME_PHONE, "43-54-67");
@@ -51,15 +46,12 @@ public class ResumeTestData {
                 "Отличное знание и опыт применения концепций ООП, SOA, шаблонов проектрирования, архитектурных шаблонов, UML, функционального программирования\n" +
                 "Родной русский, английский \"upper intermediate\"")));
 
-        Period period = new Period("Инженер по аппаратному и программному тестированию",
-                "Alcatel",
-                "https://alcatel.ru/",
-                "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM).",
+        Organization organization = new Organization("Alcatel", "https://alcatel.ru/");
+        List<Period> periods = List.of(new Period("Инженер по аппаратному и программному тестированию",
                 YearMonth.of(1997, 9),
-                YearMonth.of(2005, 1));
-        System.out.println(resume.contacts.values());
-        System.out.println(resume.sections.values());
-        System.out.println(period.toString());
-    }
+                YearMonth.of(2005, 1)));
+        Company company = new Company(organization, periods);
 
+        return resume;
+    }
 }

@@ -5,24 +5,20 @@ import java.util.Objects;
 
 public class Period {
 
-    private final String website;
-    private final String title;
+    private final String description;
     private final YearMonth startDate;
     private final YearMonth endDate;
 
-    public Period(String title, String nameCompany, String website, String description, YearMonth startDate, YearMonth endDate) {
-        this.title = title;
-        this.website = website;
+    public Period(String description, YearMonth startDate, YearMonth endDate) {
+        Objects.requireNonNull(startDate,"startDate must nor be null");
+        Objects.requireNonNull(endDate,"endDate must nor be null");
+        this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getWebsite() {
-        return website;
+    public String getDescription() {
+        return description;
     }
 
     public YearMonth getStartDate() {
@@ -39,19 +35,18 @@ public class Period {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Period period = (Period) o;
-        return Objects.equals(title, period.title) && Objects.equals(website, period.website) && Objects.equals(startDate, period.startDate) && Objects.equals(endDate, period.endDate);
+        return Objects.equals(description, period.description) && Objects.equals(startDate, period.startDate) && Objects.equals(endDate, period.endDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), title, website, startDate, endDate);
+        return Objects.hash(super.hashCode(), description, startDate, endDate);
     }
 
     @Override
     public String toString() {
         return "Period{" +
-                "website='" + website + '\'' +
-                ", title='" + title + '\'' +
+                "description='" + description + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 '}';

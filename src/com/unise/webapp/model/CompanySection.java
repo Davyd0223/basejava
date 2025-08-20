@@ -8,6 +8,7 @@ public class CompanySection extends Section {
     private final List<String> company;
 
     public CompanySection(List<String> company) {
+        Objects.requireNonNull(company,"Company must not be null");
         this.company = company;
     }
 
