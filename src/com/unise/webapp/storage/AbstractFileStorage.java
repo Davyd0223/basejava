@@ -5,12 +5,12 @@ import com.unise.webapp.model.Resume;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public abstract class AbstractFileStorage extends AbstractStorage<File> {
-    private File directory;
+    private final File directory;
 
     protected AbstractFileStorage(File directory) throws IllegalAccessException {
         Objects.requireNonNull(directory, "directory must not be null");
@@ -21,6 +21,14 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not readable/writable");
         }
         this.directory = directory;
+    }
+
+    protected abstract void doWrite(Resume r, File file) throws StorageException;
+
+    protected abstract Resume doRead(File file) throws StorageException;
+
+    public File getDirectory() {
+        return directory;
     }
 
     @Override
@@ -43,11 +51,9 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         }
     }
 
-    protected abstract void doWrite(Resume r, File file);
-
     @Override
     protected Resume doGet(File file) {
-        return null;
+        return doRead(file);
     }
 
     @Override
@@ -61,25 +67,51 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected void doDelete(File file) {
-        directory.delete();
+        if (!file.delete()) {
+            throw new StorageException("Couldn't delete the file", null);
+        }
     }
 
     @Override
     protected List<Resume> doCopyAll() {
-        return Collections.emptyList();
+        File[] files = directory.listFiles();
+        if(files == null){
+            throw new StorageException("Couldn't delete the file", null);
+        }
+        List<Resume> resume = new ArrayList<>();
+        for(File item : files){
+            resume.add(doRead(item));
+        }
+        return resume;
     }
 
     @Override
     public int size() {
-        return (int) directory.length();
+        String[] list = directory.list();
+        if (list == null) {
+            throw new StorageException("Directory read error", null);
+        }
+        int countFile = 0;
+        for (String item : list) {
+            File file = new File(directory, item);
+            if (file.isFile()) {
+                countFile++;
+            }
+        }
+        return countFile;
     }
 
     @Override
     public void clear() {
-        directory.delete();
-    }
-
-    public File getDirectory() {
-        return directory;
+        String[] list = directory.list();
+        if (list == null) {
+            throw new StorageException("Directory read error", null);
+        }
+        for (String item : list) {
+            File file = new File(directory, item);
+            if (file.isFile()) {
+                doDelete(file);
+            }
+        }
     }
 }
