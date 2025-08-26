@@ -15,7 +15,7 @@ public class MainFile {
           List<Path> pathList = stream.toList();
           for (Path path : pathList) {
               if(Files.isRegularFile(path)){
-                  System.out.println(path);
+                  System.out.println("File: " + path);
               }
           }
       }

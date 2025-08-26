@@ -7,7 +7,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+
 public abstract class AbstractStorageTest {
+    protected static final File STORAGE_DIR = new File("C:\\Projects\\basejava\\storage2");
+
     private final Storage storage;
 
     private static final String UUID_1 = "uuid1";

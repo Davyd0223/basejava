@@ -2,6 +2,7 @@ package com.unise.webapp.storage;
 
 import com.unise.webapp.model.*;
 
+import java.time.Month;
 import java.time.YearMonth;
 import java.util.List;
 
@@ -48,8 +49,8 @@ public class ResumeTestData {
 
         Organization organization = new Organization("Alcatel", "https://alcatel.ru/");
         List<Period> periods = List.of(new Period("Инженер по аппаратному и программному тестированию",
-                YearMonth.of(1997, 9),
-                YearMonth.of(2005, 1)));
+                YearMonth.of(1997, Month.SEPTEMBER),
+                YearMonth.of(2005,Month.JANUARY)));
         Company company = new Company(organization, periods);
 
         return resume;
