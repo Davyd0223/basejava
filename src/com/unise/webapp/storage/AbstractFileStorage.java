@@ -16,7 +16,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         if (!directory.isDirectory()) {
             throw new IllegalAccessException(directory.getAbsolutePath() + " is not directory");
         }
-        if (!directory.canWrite() || directory.canRead()) {
+        if (!directory.canWrite() || !directory.canRead()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not readable/writable");
         }
         this.directory = directory;

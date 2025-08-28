@@ -68,6 +68,4 @@ public abstract class AbstractStorage<SK> implements Storage {
         Collections.sort(list);
         return list;
     }
-
-    ;
 }
