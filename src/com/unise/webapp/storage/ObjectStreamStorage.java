@@ -5,21 +5,22 @@ import com.unise.webapp.model.Resume;
 
 import java.io.*;
 
-public class ObjectStreamStorage extends AbstractFileStorage {
+public class ObjectStreamStorage extends AbstractFileStorage implements SerializationStrategy  {
 
     protected ObjectStreamStorage(File directory) throws IllegalAccessException {
-         super(directory);
+        super(directory);
+        setSerializationStrategy(this);
     }
 
     @Override
-    protected void doWrite(Resume r, OutputStream os) throws StorageException, IOException {
+    public void doWrite(Resume r, OutputStream os) throws StorageException, IOException {
         try (ObjectOutputStream oos = new ObjectOutputStream(os)) {
             oos.writeObject(r);
         }
     }
 
     @Override
-    protected Resume doRead(InputStream is) throws StorageException {
+    public Resume doRead(InputStream is) throws StorageException {
         try (ObjectInputStream ois = new ObjectInputStream(is)) {
             return (Resume) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {

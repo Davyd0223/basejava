@@ -9,7 +9,13 @@ import java.util.List;
 import java.util.Objects;
 
 public abstract class AbstractFileStorage extends AbstractStorage<File> {
+
     private final File directory;
+    SerializationStrategy serializationStrategy;
+
+    public void setSerializationStrategy(SerializationStrategy serializationStrategy) {
+        this.serializationStrategy = serializationStrategy;
+    }
 
     protected AbstractFileStorage(File directory) throws IllegalAccessException {
         Objects.requireNonNull(directory, "directory must not be null");
@@ -21,10 +27,6 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         }
         this.directory = directory;
     }
-
-    protected abstract void doWrite(Resume r, OutputStream os) throws StorageException, IOException;
-
-    protected abstract Resume doRead(InputStream is) throws StorageException;
 
     public File getDirectory() {
         return directory;
@@ -44,16 +46,16 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     protected void doSave(Resume r, File file) {
         try {
             file.createNewFile();
-            doWrite(r, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException("IO error", file.getName(), e);
         }
+        doUpdate(r, file);
     }
 
     @Override
     protected void doUpdate(Resume r, File file) {
         try {
-            doWrite(r, new BufferedOutputStream(new FileOutputStream(file)));
+            serializationStrategy.doWrite(r, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (Exception e) {
             throw new StorageException("IO error", file.getName(), e);
         }
@@ -62,7 +64,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected Resume doGet(File file) {
         try {
-            return doRead(new BufferedInputStream(new FileInputStream(file)));
+            return serializationStrategy.doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (Exception e) {
             throw new StorageException("File read error", null, e);
         }
@@ -77,14 +79,11 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected List<Resume> doCopyAll() {
-        File[] files = directory.listFiles();
-        if (files == null) {
-            throw new StorageException("Couldn't delete the file", null);
-        }
+        File[] files = list();
         List<Resume> resume = new ArrayList<>(files.length);
         for (File item : files) {
             try {
-                resume.add(doRead(new BufferedInputStream(new FileInputStream(item))));
+                resume.add(serializationStrategy.doRead(new BufferedInputStream(new FileInputStream(item))));
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
@@ -94,31 +93,24 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public int size() {
-        String[] list = directory.list();
-        if (list == null) {
-            throw new StorageException("Directory read error", null);
-        }
-        int countFile = 0;
-        for (String item : list) {
-            File file = new File(directory, item);
-            if (file.isFile()) {
-                countFile++;
-            }
-        }
-        return countFile;
+        return list().length;
     }
 
     @Override
     public void clear() {
-        String[] list = directory.list();
+        File[] files = list();
+        for (File item : files) {
+            if (item.isFile()) {
+                doDelete(item);
+            }
+        }
+    }
+
+    private File[] list() {
+        File[] list = directory.listFiles();
         if (list == null) {
             throw new StorageException("Directory read error", null);
         }
-        for (String item : list) {
-            File file = new File(directory, item);
-            if (file.isFile()) {
-                doDelete(file);
-            }
-        }
+        return list;
     }
 }

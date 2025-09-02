@@ -4,20 +4,21 @@ import com.unise.webapp.exception.StorageException;
 import com.unise.webapp.model.Resume;
 
 import java.io.*;
-import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     private final Path directory;
+    SerializationStrategy serializationStrategy;
 
-    protected abstract void doWrite(Resume r, OutputStream os) throws StorageException, IOException;
-
-    protected abstract Resume doRead(InputStream is) throws StorageException;
+    public void setSerializationStrategy(SerializationStrategy serializationStrategy) {
+        this.serializationStrategy = serializationStrategy;
+    }
 
     protected AbstractPathStorage(String dir) {
         directory = Paths.get(String.valueOf(dir));
@@ -45,16 +46,16 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     protected void doSave(Resume r, Path path) {
         try {
             Files.createFile(path);
-            doWrite(r, new BufferedOutputStream(new FileOutputStream(String.valueOf(path))));
         } catch (IOException e) {
-            throw new StorageException("IO error", null, e);
+            throw new StorageException("IO error", path.toString(), e);
         }
+        doUpdate(r, path);
     }
 
     @Override
     protected void doUpdate(Resume r, Path path) {
         try {
-            doWrite(r, new BufferedOutputStream(new FileOutputStream(path.toFile())));
+            serializationStrategy.doWrite(r, new BufferedOutputStream(new FileOutputStream(path.toFile())));
         } catch (Exception e) {
             throw new StorageException("IO error", null, e);
         }
@@ -63,7 +64,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     @Override
     protected Resume doGet(Path path) {
         try {
-            return doRead(new BufferedInputStream(new FileInputStream(path.toFile())));
+            return serializationStrategy.doRead(new BufferedInputStream(new FileInputStream(path.toFile())));
         } catch (Exception e) {
             throw new StorageException("Path read error", null, e);
         }
@@ -83,39 +84,33 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
 
     @Override
     protected List<Resume> doCopyAll() {
+        List<Resume> resumes = new ArrayList<>();
 
         if (directory == null) {
             throw new StorageException("Couldn't delete the Path", null);
         }
 
-        List<Resume> resumes = new ArrayList<>();
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(directory)) {
-            for (Path item : stream) {
-                if (Files.isRegularFile(item)) {
-                    try (InputStream is = new BufferedInputStream(new FileInputStream(item.toFile()))) {
-                        resumes.add(doRead(is));
-                    } catch (FileNotFoundException e) {
-                        throw new StorageException("Error reading file", null, e);
-                    }
-                }
-            }
-        } catch (IOException e) {
-            throw new StorageException("Error accessing directory", null, e);
-        }
+        path().filter(Files::isRegularFile).
+                map(item -> resumes.add(serializationStrategy.doRead((InputStream) item)));
+
         return resumes;
     }
 
     @Override
     public int size() {
-        return directory.getNameCount();
+        return (int) path().count(); //(int) stream.count();
     }
 
     @Override
     public void clear() {
+        path().forEach(this::doDelete);
+    }
+
+    private Stream<Path> path() {
         try {
-            Files.list(directory).forEach(this::doDelete);
+            return Files.list(directory);
         } catch (IOException e) {
-            throw new StorageException("Path delete error", null);
+            throw new StorageException("Error reading file", null, e);
         }
     }
 }
