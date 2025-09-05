@@ -2,6 +2,7 @@ package com.unise.webapp.storage;
 
 import com.unise.webapp.exception.StorageException;
 import com.unise.webapp.model.Resume;
+import com.unise.webapp.storage.serializer.SerializationStrategy;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -12,17 +13,15 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-public abstract class AbstractPathStorage extends AbstractStorage<Path> {
+public class PathStorage extends AbstractStorage<Path> {
     private final Path directory;
-    SerializationStrategy serializationStrategy;
+    private final SerializationStrategy serializationStrategy;
 
-    public void setSerializationStrategy(SerializationStrategy serializationStrategy) {
+    protected PathStorage(String dir, SerializationStrategy serializationStrategy) {
+        Objects.requireNonNull(dir, "directory must not be null");
+
+        directory = Paths.get(dir);
         this.serializationStrategy = serializationStrategy;
-    }
-
-    protected AbstractPathStorage(String dir) {
-        directory = Paths.get(String.valueOf(dir));
-        Objects.requireNonNull(directory, "directory must not be null");
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " is noe directory or is not writable");
         }
@@ -98,7 +97,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
 
     @Override
     public int size() {
-        return (int) path().count(); //(int) stream.count();
+        return (int) path().count();
     }
 
     @Override

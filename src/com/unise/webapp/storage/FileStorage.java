@@ -2,23 +2,22 @@ package com.unise.webapp.storage;
 
 import com.unise.webapp.exception.StorageException;
 import com.unise.webapp.model.Resume;
+import com.unise.webapp.storage.serializer.SerializationStrategy;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractFileStorage extends AbstractStorage<File> {
+public class FileStorage extends AbstractStorage<File> {
 
     private final File directory;
-    SerializationStrategy serializationStrategy;
+    private final SerializationStrategy serializationStrategy;
 
-    public void setSerializationStrategy(SerializationStrategy serializationStrategy) {
-        this.serializationStrategy = serializationStrategy;
-    }
-
-    protected AbstractFileStorage(File directory) throws IllegalAccessException {
+    protected FileStorage(File directory, SerializationStrategy serializationStrategy) throws IllegalAccessException {
         Objects.requireNonNull(directory, "directory must not be null");
+
+        this.serializationStrategy = serializationStrategy;
         if (!directory.isDirectory()) {
             throw new IllegalAccessException(directory.getAbsolutePath() + " is not directory");
         }
@@ -79,14 +78,12 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected List<Resume> doCopyAll() {
+
         File[] files = list();
         List<Resume> resume = new ArrayList<>(files.length);
+
         for (File item : files) {
-            try {
-                resume.add(serializationStrategy.doRead(new BufferedInputStream(new FileInputStream(item))));
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            }
+            resume.add(doGet(item));
         }
         return resume;
     }

@@ -19,10 +19,10 @@ public abstract class AbstractStorageTest {
     private static final String UUID_3 = "uuid3";
     private static final String UUID_4 = "uuid4";
 
-    Resume resume1 = ResumeTestData.createResume(UUID_1,"Name1");
-    Resume resume2 = ResumeTestData.createResume(UUID_2,"Name2");
-    Resume resume3 = ResumeTestData.createResume(UUID_3,"Name3");
-    Resume resume4 = ResumeTestData.createResume(UUID_4,"Name4");
+    Resume resume1 = ResumeTestData.createResume(UUID_1, "Name1");
+    Resume resume2 = ResumeTestData.createResume(UUID_2, "Name2");
+    Resume resume3 = ResumeTestData.createResume(UUID_3, "Name3");
+    Resume resume4 = ResumeTestData.createResume(UUID_4, "Name4");
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
