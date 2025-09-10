@@ -1,14 +1,20 @@
 package com.unise.webapp.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    private final String name;
-    private final String website;
+    private String name;
+    private String website;
+
+    public Organization() {
+    }
 
     public Organization(String name, String website) {
         this.name = name;

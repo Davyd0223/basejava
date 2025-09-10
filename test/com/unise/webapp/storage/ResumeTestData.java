@@ -50,7 +50,7 @@ public class ResumeTestData {
         Organization organization = new Organization("Alcatel", "https://alcatel.ru/");
         List<Period> periods = List.of(new Period("Инженер по аппаратному и программному тестированию",
                 YearMonth.of(1997, Month.SEPTEMBER),
-                YearMonth.of(2005,Month.JANUARY)));
+                YearMonth.of(2005, Month.JANUARY)));
         Company company = new Company(organization, periods);
 
         return resume;

@@ -1,21 +1,32 @@
 package com.unise.webapp.model;
 
+import com.unise.webapp.util.LocalDateAdapter;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.YearMonth;
 import java.util.Objects;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Period implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private final String description;
-    private final YearMonth startDate;
-    private final YearMonth endDate;
+    private String description;
+    @XmlJavaTypeAdapter(LocalDateAdapter.class)
+    private YearMonth startDate;
+    @XmlJavaTypeAdapter(LocalDateAdapter.class)
+    private YearMonth endDate;
+
+    public Period() {
+    }
 
     public Period(String description, YearMonth startDate, YearMonth endDate) {
-        Objects.requireNonNull(startDate,"startDate must nor be null");
-        Objects.requireNonNull(endDate,"endDate must nor be null");
+        Objects.requireNonNull(startDate, "startDate must nor be null");
+        Objects.requireNonNull(endDate, "endDate must nor be null");
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;

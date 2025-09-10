@@ -9,14 +9,17 @@ public class ListSection extends Section {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private final List<String> items;
+    private List<String> items;
 
-    public ListSection(String... items){
+    public ListSection() {
+    }
+
+    public ListSection(String... items) {
         this(Arrays.asList(items));
     }
 
     public ListSection(List<String> items) {
-        Objects.requireNonNull(items,"Items must not be null");
+        Objects.requireNonNull(items, "Items must not be null");
         this.items = items;
     }
 
@@ -26,7 +29,7 @@ public class ListSection extends Section {
 
     @Override
     public boolean equals(Object o) {
-        if(this == o) return true;
+        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ListSection that = (ListSection) o;
         return Objects.equals(items, that.items);

@@ -90,7 +90,13 @@ public class PathStorage extends AbstractStorage<Path> {
         }
 
         path().filter(Files::isRegularFile).
-                map(item -> resumes.add(serializationStrategy.doRead((InputStream) item)));
+                map(item -> {
+                    try {
+                        return resumes.add(serializationStrategy.doRead((InputStream) item));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
 
         return resumes;
     }

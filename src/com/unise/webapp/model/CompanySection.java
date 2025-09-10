@@ -1,22 +1,28 @@
 package com.unise.webapp.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import java.io.Serial;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class CompanySection extends Section {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private final List<Company> company;
+    private List<Company> company;
 
-    public CompanySection(Company... company){
+    public CompanySection() {
+    }
+
+    public CompanySection(Company... company) {
         this(Arrays.asList(company));
     }
 
     public CompanySection(List<Company> company) {
-        Objects.requireNonNull(company,"Company must not be null");
+        Objects.requireNonNull(company, "Company must not be null");
         this.company = company;
     }
 
