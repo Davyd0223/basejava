@@ -60,40 +60,51 @@ public class MainConcurrency {
 
         final String lock1 = "lock1";
         final String lock2 = "lock2";
-        deadlock(lock1, lock2);
-        deadlock(lock2, lock1);
+        DeadLock.deadlock(lock1, lock2);
+        DeadLock.deadlock(lock2, lock1);
     }
 
-    private static void deadlock(Object lock1, Object lock2) {
-        new Thread(() -> {
-            synchronized (lock1){
-                System.out.println("Поток 1: Захватил ресурс 1.");
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            System.out.println("Поток 1: Ждет ресурс 2.");
-            synchronized (lock2){
-                System.out.println("Поток 2: Захватил ресурс 2.");
-            }
-        }).start();
+    private static class DeadLock {
+        private static void deadlock(Object lock1, Object lock2) {
+            startLockedThread(lock1, lock2,
+                    "Поток 1: Захватил ресурс 1.",
+                    "Поток 1: Ждет ресурс 2.",
+                    () -> {
+                        synchronized (lock1) {
+                            System.out.println("Поток 1: Захватил ресурс 1.");
+                            sleep(100);
+                        }
+                    });
 
-        new Thread(() -> {
-            synchronized (lock2){
-                System.out.println("Поток 2: Захватил ресурс 2.");
-                try {
-                  Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+            startLockedThread(lock2, lock1,
+                    "Поток 2: Захватил ресурс 2.",
+                    "Поток 2: Ждет ресурс 1.",
+                    () -> {
+                        synchronized (lock1) {
+                            System.out.println("Поток 2: Захватил ресурс 2.");
+                            sleep(100);
+                        }
+                    });
+        }
+
+        private static void startLockedThread(Object firstLock, Object secondLock, String successMsg,
+                                              String waitMsg, Runnable lockBlock) {
+            new Thread(() -> {
+                lockBlock.run();
+                System.out.println(waitMsg);
+                synchronized (secondLock) {
+                    System.out.println(successMsg);
                 }
-                System.out.println("Поток 2: Ждет ресурс 1.");
-                synchronized (lock1) {
-                    System.out.println("Поток 2: Захватил ресурс 2 и 1.");
-                }
+            }).start();
+        }
+
+        private static void sleep(long millis) {
+            try {
+                Thread.sleep(millis);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-        }).start();
+        }
     }
 
     private synchronized void inc() {
