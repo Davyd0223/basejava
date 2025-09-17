@@ -6,10 +6,9 @@ import java.util.List;
 
 public class JavaStreams {
     static int[] array = {1, 2, 3, 3, 2, 3};
-    //int result = minValue(array);
 
     private static int minValue(int[] values) {
-        return (int) Arrays.stream(values).asLongStream().distinct().sorted()
+        return Arrays.stream(values).distinct().sorted()
                 .reduce(0, (result, i) -> 10 * result + i);
     }
 

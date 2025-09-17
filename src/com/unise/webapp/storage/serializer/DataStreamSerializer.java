@@ -109,14 +109,17 @@ public class DataStreamSerializer implements SerializationStrategy {
         return list;
     }
 
+    @FunctionalInterface
     private interface ElementProcessor {
         void process() throws Exception;
     }
 
+    @FunctionalInterface
     private interface ElementReader<T> {
         T read() throws Exception;
     }
 
+    @FunctionalInterface
     private interface ElementWriter<T> {
         void write(T t) throws Exception;
     }
