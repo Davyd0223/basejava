@@ -1,5 +1,6 @@
 package com.unise.webapp.storage;
 
+import com.unise.webapp.Config;
 import com.unise.webapp.exception.NotExistStorageException;
 import com.unise.webapp.exception.StorageException;
 import com.unise.webapp.model.Resume;
@@ -9,8 +10,10 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public abstract class AbstractStorageTest {
-    protected static final File STORAGE_DIR = new File("C:\\Projects\\basejava\\storage");
+    protected static final File STORAGE_DIR = Config.get().getStorageDir();
 
     private final Storage storage;
 
@@ -83,7 +86,7 @@ public abstract class AbstractStorageTest {
     public void update() throws Exception {
         Resume newResume = new Resume(UUID_1, "New name");
         storage.update(newResume);
-        Assertions.assertEquals(newResume, storage.get(UUID_1));
+        assertEquals(newResume, storage.get(UUID_1));
     }
 
     @Test
@@ -95,10 +98,10 @@ public abstract class AbstractStorageTest {
     }
 
     private void assertGet(Resume r) {
-        Assertions.assertEquals(r, storage.get(r.getUuid()));
+        assertEquals(r, storage.get(r.getUuid()));
     }
 
     private void assertSize(int size) {
-        Assertions.assertEquals(size, storage.size());
+        assertEquals(size, storage.size());
     }
 }

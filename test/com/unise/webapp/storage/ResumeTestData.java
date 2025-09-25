@@ -1,19 +1,11 @@
 package com.unise.webapp.storage;
 
-import com.unise.webapp.model.*;
-
-import java.time.Month;
-import java.time.YearMonth;
-import java.util.List;
-
-import static com.unise.webapp.model.ContactType.*;
-import static com.unise.webapp.model.SectionType.*;
+import com.unise.webapp.model.Resume;
 
 public class ResumeTestData {
 
     public static Resume createResume(String uuid, String fullName) {
-        Resume resume = new Resume(uuid, fullName);
-        resume.contacts.put(PHONE, "23-54-78");
+        /*resume.contacts.put(PHONE, "23-54-78");
         resume.contacts.put(MOBILE, "+7(921) 855-0482");
         resume.contacts.put(HOME_PHONE, "43-54-67");
         resume.contacts.put(SKYPE, "skype:grigory.kislin");
@@ -51,8 +43,8 @@ public class ResumeTestData {
         List<Period> periods = List.of(new Period("Инженер по аппаратному и программному тестированию",
                 YearMonth.of(1997, Month.SEPTEMBER),
                 YearMonth.of(2005, Month.JANUARY)));
-        Company company = new Company(organization, periods);
+        Company company = new Company(organization, periods);*/
 
-        return resume;
+        return new Resume(uuid, fullName);
     }
 }

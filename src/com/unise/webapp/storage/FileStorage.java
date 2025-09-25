@@ -72,7 +72,7 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     protected void doDelete(File file) {
         if (!file.delete()) {
-            throw new StorageException("Couldn't delete the file", null);
+            throw new StorageException("Couldn't delete the file", (Exception) null);
         }
     }
 
@@ -106,7 +106,7 @@ public class FileStorage extends AbstractStorage<File> {
     private File[] list() {
         File[] list = directory.listFiles();
         if (list == null) {
-            throw new StorageException("Directory read error", null);
+            throw new StorageException("Directory read error", (Exception) null);
         }
         return list;
     }
