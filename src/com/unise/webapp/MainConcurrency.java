@@ -66,7 +66,7 @@ public class MainConcurrency {
 
     private static void deadlock(Object lock1, Object lock2) {
         new Thread(() -> {
-            synchronized (lock1){
+            synchronized (lock1) {
                 System.out.println("Поток 1: Захватил ресурс 1.");
                 try {
                     Thread.sleep(100);
@@ -75,16 +75,16 @@ public class MainConcurrency {
                 }
             }
             System.out.println("Поток 1: Ждет ресурс 2.");
-            synchronized (lock2){
+            synchronized (lock2) {
                 System.out.println("Поток 2: Захватил ресурс 2.");
             }
         }).start();
 
         new Thread(() -> {
-            synchronized (lock2){
+            synchronized (lock2) {
                 System.out.println("Поток 2: Захватил ресурс 2.");
                 try {
-                  Thread.sleep(100);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

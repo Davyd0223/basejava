@@ -1,5 +1,6 @@
 package com.unise.webapp.sql;
 
+import com.unise.webapp.exception.ExistStorageException;
 import com.unise.webapp.exception.StorageException;
 
 import java.sql.Connection;
@@ -22,11 +23,14 @@ public class SqlHelper {
         execute(sql, PreparedStatement::execute);
     }
 
-    public <T> T execute(String sql, SqlExecutor<T> executor) {
+    public <T> T execute(String sql, SqlExecutor<T> executor) throws ExistStorageException {
         try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             return executor.execute(ps);
         } catch (SQLException e) {
+            if ("23505".equals(e.getSQLState())) {
+                throw new ExistStorageException("Дублирование uuid в базе");
+            }
             throw new StorageException(e);
         }
     }

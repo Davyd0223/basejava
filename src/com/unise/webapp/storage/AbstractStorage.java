@@ -13,11 +13,17 @@ public abstract class AbstractStorage<SK> implements Storage {
     private static final Logger LOG = Logger.getLogger(AbstractStorage.class.getName());
 
     protected abstract SK findIndex(String uuid);
+
     protected abstract boolean isExist(SK searchKey);
+
     protected abstract void doSave(Resume r, SK searchKey);
+
     protected abstract Resume doGet(SK searchKey);
+
     protected abstract void doUpdate(Resume r, SK searchKey);
+
     protected abstract void doDelete(SK searchKey);
+
     protected abstract List<Resume> doCopyAll();
 
     public void save(Resume r) {

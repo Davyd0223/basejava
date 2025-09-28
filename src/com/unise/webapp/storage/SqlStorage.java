@@ -21,8 +21,8 @@ public class SqlStorage implements Storage {
     @Override
     public int size() {
         return sqlHelper.execute("SELECT COUNT(*) FROM resume", st -> {
-           ResultSet rs = st.executeQuery();
-           return rs.next() ? rs.getInt(1) : 0;
+            ResultSet rs = st.executeQuery();
+            return rs.next() ? rs.getInt(1) : 0;
         });
     }
 
@@ -44,25 +44,29 @@ public class SqlStorage implements Storage {
             if (!rs.next()) {
                 throw new NotExistStorageException(uuid);
             }
-           return new Resume(uuid, rs.getString("full_name"));
+            return new Resume(uuid, rs.getString("full_name"));
         });
     }
 
     @Override
     public void update(Resume r) {
-        sqlHelper.execute("UPDATE resume SET full_name = ? WHERE uuid = ?", st -> {
+        Integer rowsAffected = sqlHelper.execute("UPDATE resume SET full_name = ? WHERE uuid = ?", st -> {
             st.setString(1, r.getFullName());
             st.setString(2, r.getUuid());
             st.execute();
-         return null;
+            return st.executeUpdate();
         });
+        if (rowsAffected == 0) {
+            throw new NotExistStorageException(r.getUuid());
+
+        }
     }
 
     @Override
     public void delete(String uuid) {
         sqlHelper.execute("DELETE FROM resume r WHERE r.uuid = ?", st -> {
             st.setString(1, uuid);
-            if(st.executeUpdate()==0){
+            if (st.executeUpdate() == 0) {
                 throw new NotExistStorageException(uuid);
             }
             return null;
@@ -72,9 +76,9 @@ public class SqlStorage implements Storage {
     @Override
     public List<Resume> getAllSorted() {
         List<Resume> resumes = new ArrayList<>();
-        return sqlHelper.execute("SELECT * FROM resume", st -> {
+        return sqlHelper.execute("SELECT * FROM resume ORDER BY full_name", st -> {
             ResultSet rs = st.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 resumes.add(new Resume(rs.getString("uuid"), rs.getString("full_name")));
             }
             return resumes;
