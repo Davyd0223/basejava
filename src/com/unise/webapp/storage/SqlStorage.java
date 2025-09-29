@@ -53,7 +53,6 @@ public class SqlStorage implements Storage {
         Integer rowsAffected = sqlHelper.execute("UPDATE resume SET full_name = ? WHERE uuid = ?", st -> {
             st.setString(1, r.getFullName());
             st.setString(2, r.getUuid());
-            st.execute();
             return st.executeUpdate();
         });
         if (rowsAffected == 0) {
@@ -76,7 +75,7 @@ public class SqlStorage implements Storage {
     @Override
     public List<Resume> getAllSorted() {
         List<Resume> resumes = new ArrayList<>();
-        return sqlHelper.execute("SELECT * FROM resume ORDER BY full_name", st -> {
+        return sqlHelper.execute("SELECT * FROM resume ORDER BY full_name,uuid", st -> {
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 resumes.add(new Resume(rs.getString("uuid"), rs.getString("full_name")));

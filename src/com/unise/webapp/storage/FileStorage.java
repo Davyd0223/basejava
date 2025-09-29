@@ -27,10 +27,6 @@ public class FileStorage extends AbstractStorage<File> {
         this.directory = directory;
     }
 
-    public File getDirectory() {
-        return directory;
-    }
-
     @Override
     protected File findIndex(String uuid) {
         return new File(directory, uuid);

@@ -1,5 +1,8 @@
 package com.unise.webapp;
 
+import com.unise.webapp.storage.SqlStorage;
+import com.unise.webapp.storage.Storage;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -10,8 +13,8 @@ public class Config {
     protected static final File PROPS = new File("config\\resumes.properties");
     private static final Config INSTANCE = new Config();
 
-    private final Properties props = new Properties();
     private final File storageDir;
+    private final Storage storage;
 
     public static Config get() {
         return INSTANCE;
@@ -19,8 +22,11 @@ public class Config {
 
     private Config() {
         try (InputStream is = new FileInputStream(PROPS)) {
+            Properties props = new Properties();
             props.load(is);
             storageDir = new File(props.getProperty("storage.dir"));
+            storage = new SqlStorage(props.getProperty("db.url")
+                    , props.getProperty("db.user"), props.getProperty("db.password"));
         } catch (IOException e) {
             throw new IllegalStateException("Invalid config file " + PROPS.getAbsolutePath());
         }
@@ -30,16 +36,7 @@ public class Config {
         return storageDir;
     }
 
-    public String getDbUrl() {
-        return props.getProperty("db.url");
+    public Storage getStorage() {
+        return storage;
     }
-
-    public String getDbUser() {
-        return props.getProperty("db.user");
-    }
-
-    public String getDbPassword() {
-        return props.getProperty("db.password");
-    }
-
 }
