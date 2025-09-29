@@ -9,7 +9,7 @@ public class JsonSectionAdepter<T> implements JsonSerializer<T>, JsonDeserialize
     private static final String INSTANCE = "INSTANCE";
 
     public T deserialize(JsonElement json, Type type, JsonDeserializationContext context) throws JsonParseException {
-        JsonObject  jsonObject = json.getAsJsonObject();
+        JsonObject jsonObject = json.getAsJsonObject();
         JsonPrimitive prim = (JsonPrimitive) jsonObject.get(CLASSNAME);
         String className = prim.getAsString();
 
@@ -21,7 +21,7 @@ public class JsonSectionAdepter<T> implements JsonSerializer<T>, JsonDeserialize
         }
     }
 
-    public JsonElement serialize(T section, Type type, JsonSerializationContext context){
+    public JsonElement serialize(T section, Type type, JsonSerializationContext context) {
         JsonObject retValue = new JsonObject();
         retValue.addProperty(CLASSNAME, section.getClass().getName());
         JsonElement elem = context.serialize(section);

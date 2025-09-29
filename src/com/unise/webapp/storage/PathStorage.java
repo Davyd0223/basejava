@@ -74,7 +74,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             boolean deleted = Files.deleteIfExists(path);
             if (!deleted) {
-                throw new StorageException("Path does not exist", null);
+                throw new StorageException("Path does not exist", (Exception) null);
             }
         } catch (IOException e) {
             throw new StorageException("Failed to delete path", null, e);
@@ -86,7 +86,7 @@ public class PathStorage extends AbstractStorage<Path> {
         List<Resume> resumes = new ArrayList<>();
 
         if (directory == null) {
-            throw new StorageException("Couldn't delete the Path", null);
+            throw new StorageException("Couldn't delete the Path", (Exception) null);
         }
 
         path().filter(Files::isRegularFile).
