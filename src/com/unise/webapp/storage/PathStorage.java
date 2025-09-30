@@ -20,15 +20,11 @@ public class PathStorage extends AbstractStorage<Path> {
     protected PathStorage(String dir, SerializationStrategy serializationStrategy) {
         Objects.requireNonNull(dir, "directory must not be null");
 
-        directory = Paths.get(dir);
         this.serializationStrategy = serializationStrategy;
+        directory = Paths.get(dir);
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
-            throw new IllegalArgumentException(dir + " is noe directory or is not writable");
+            throw new IllegalArgumentException(dir + " is not directory or is not writable");
         }
-    }
-
-    public Path getDirectory() {
-        return directory;
     }
 
     @Override
@@ -89,14 +85,13 @@ public class PathStorage extends AbstractStorage<Path> {
             throw new StorageException("Couldn't delete the Path", (Exception) null);
         }
 
-        path().filter(Files::isRegularFile).
-                map(item -> {
-                    try {
-                        return resumes.add(serializationStrategy.doRead((InputStream) item));
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+        path().filter(Files::isRegularFile).map(item -> {
+            try {
+                return resumes.add(serializationStrategy.doRead((InputStream) item));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         return resumes;
     }
