@@ -22,6 +22,7 @@ public class SqlHelper {
     public void execute(String sql) {
         execute(sql, PreparedStatement::execute);
     }
+
     public interface SqlTransaction<T> {
         T execute(Connection ps) throws SQLException;
     }
@@ -38,8 +39,8 @@ public class SqlHelper {
         }
     }
 
-    public <T> T transactionExecute( SqlTransaction<T> executor) throws ExistStorageException {
-        try(Connection conn = connectionFactory.getConnection()){
+    public <T> T transactionExecute(SqlTransaction<T> executor) throws ExistStorageException {
+        try (Connection conn = connectionFactory.getConnection()) {
             try {
                 conn.setAutoCommit(false);
                 T res = executor.execute(conn);
